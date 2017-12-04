@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    background: url(https://3.bp.blogspot.com/-OXA9cMw_n74/V7VZFZ0mctI/AAAAAAAAR2g/7zQvNw00tA0NGoPwLv1vDCiH4kS8U9Z7gCLcB/s1600/vakantie.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+
+/*The header*/
+
+header img {
+    width: 100%;
+}
+
+header {
+    background-color: white;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row nowrap;
+            flex-flow: row nowrap;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    padding: 1rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+#langs img {
+    width: 100%;
+}
+
+#langs li {
+    display: inline-block;
+    width: 8%;
+    float: right;
+    margin-left: 1rem;
+    -webkit-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+#langs li:hover {
+    -webkit-transform: scale(1.2);
+        -ms-transform: scale(1.2);
+            transform: scale(1.2);
+}
+
+
+/*The nav bar*/
+
+nav {
+    background-color: #d81e05;
+}
+
+#navWrapper {
+    width: 60%;
+    margin: 0 auto;
+}
+
+#navWrapper a {
+    padding: 0.5rem;
+    color: white;
+    font-weight: bold;
+    width: 24%;
+    display: inline-block;
+    text-align: center;
+    border-left: ridge black 0.05rem;
+    -webkit-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+#navWrapper a:first-child {
+    border: none;
+}
+
+#navWrapper a:hover {
+    color: #d81e05;
+    background-color: #fff;
+}
+
+/* End navBar*/
+
+/*The main*/
+
+#loggedInInfo {
+    background-color: white;
+    width: 60%;
+    margin: 5rem auto;
+    margin-bottom: 9rem;
+    padding: 3rem;
+    border: ridge black 1px;
+    border-radius: 1rem;
+}
+
+#loggedInInfo h1 {
+    margin-bottom: 2rem;
+}
+
+/* End main*/
+
+/* Footer*/
+
+footer {
+    color: white;
+    background-color: #d81e05;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* End Footer*/
+
+/* Mobile and tablet version*/
+
+@media screen and (max-width: 950px) {
+    body {
+        font-family: cursive;
+    }
+    #navWrapper {
+        width: 100%;
+    }
+    #navWrapper a {
+        width: 100%;
+    }
+    #loggedInInfo {
+        width: 90%;
+    }
+    #pakettenWrapper {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-flow: column nowrap;
+                flex-flow: column nowrap;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
+    }
+    .paketBox {
+        width: 90%;
+    }
+}

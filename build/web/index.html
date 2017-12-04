@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Corendon Wifi-portal</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="icon" href="http://www.corendon.com/favicon.png">
+</head>
+
+<body>
+    <main>
+        <div id="login">
+            <p>Welcome!<br> Corendon offers you free WiFI service
+            </p>
+            <div id="theForm">
+                <form action="entryServlet" method="post">
+                    <input type="text" id="firstName" name="firstName" class="formItem" placeholder="First Name" required>
+                    <input type="text" id="lastName" name="lastName" class="formItem" placeholder="Last name" required>
+                    <input type="text" class="formItem" id="ticketNumber" name="ticketNumber" placeholder="Ticket number" required>
+                    <br/>
+                    <p>By using our WiFi Service, you agree to our <a href="privacy.html">terms and conditions</a>
+                        <input id="checkbox" type="checkbox" name="agree" required><b> I agree</b>
+                    </p>
+                    <input type="submit" id="button" value="login" class="formItem">
+                </form>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

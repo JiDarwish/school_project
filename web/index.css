@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+body {
+    background-image: url("https://3.bp.blogspot.com/-OXA9cMw_n74/V7VZFZ0mctI/AAAAAAAAR2g/7zQvNw00tA0NGoPwLv1vDCiH4kS8U9Z7gCLcB/s1600/vakantie.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: sans-serif;
+}
+
+main {
+
+    margin: 4rem;
+    margin-top: 25vh;
+}
+
+#login {
+    width: 50%;
+    margin: 0.5rem auto;
+    text-align: center;
+    background-color: azure;
+    -webkit-animation: appearCool 1s ease-in-out;
+            animation: appearCool 1s ease-in-out;
+}
+
+@-webkit-keyframes appearCool {
+    0% {
+        opacity: 0
+    }
+    
+    100% {
+        opacity: 1
+    }
+    
+}
+
+@keyframes appearCool {
+    0% {
+        opacity: 0
+    }
+    
+    100% {
+        opacity: 1
+    }
+    
+}
+
+#login p {
+    margin: 1rem 0;
+}
+
+#login p:first-child {
+    background-color: #d81e05;
+    padding: 0.5rem;
+    color: #fff;
+}
+
+.formItem {
+    text-align: center;
+    /*    line-height: 3rem;*/
+    font-size: 1.2rem;
+    width: 50%;
+    min-height: 2rem;
+    margin-bottom: 1rem;
+}
+
+
+#checkbox {
+    cursor: pointer;
+}
+
+#button {
+    background-color: #d81e05;
+    color: #fff;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+#button:hover {
+    -webkit-transform: scale(1.01);
+        -ms-transform: scale(1.01);
+            transform: scale(1.01);
+    -webkit-box-shadow: 3px 3px 10px black;
+            box-shadow: 3px 3px 10px black;
+}
+
+#button:active {
+    -webkit-transform: scale(0.8);
+        -ms-transform: scale(0.8);
+            transform: scale(0.8);
+}
+
+
+/*Mobile version*/
+
+@media screen and (max-width: 950px) {
+    body {
+        font-family: cursive;
+    }
+    main {
+        margin: 3rem 0;
+        width: 100%;
+    }
+    #login {
+        width: 80%;
+    }
+    .formItem {
+        width: 90%;
+    }
+}
