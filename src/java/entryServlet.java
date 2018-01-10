@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,32 +44,46 @@ public class entryServlet extends HttpServlet {
 
         String passagiersResponse = requestGetResponseString(passengerReqestBody, passagiersUrlString);
 
-        ///////////////////////////////////////Done with the requests 
-        
-        ////////Now get the request parameters in variables
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String ticketNumber = request.getParameter("ticketNumber");
-        ////////End getting parameters
 
-
-        
-        //Methods for manipulating the JsonString into a usable Arraylist for both Passengers and tickets
         ArrayList<Passenger> listPassengers = getPassengers(passagiersResponse);//Passengers ArrayList
 
-        if (checkValidLogIn(firstName, lastName, ticketNumber, listPassengers, out)){
+        if (checkValidLogIn(firstName, lastName, ticketNumber, listPassengers, out)) {
+            String ipAddress = getIpAddress();
+            grantUserInternet(ipAddress);
             request.getRequestDispatcher("welkom_en.html").forward(request, response);
         } else {
             out.println("Go to hell");
         }
-
-
-
     }
     
-    static boolean checkValidLogIn(String fName, String lName, String ticketNum, ArrayList<Passenger> allThePassengers, PrintWriter someOut) throws MalformedURLException, IOException{
+    public void grantUserInternet(String ipAddress) throws IOException {
+        Runtime rt = Runtime.getRuntime();
+        Process proc1 = rt.exec("iptables iets" + ipAddress);//////////////////////////////// TODO TODO TODO TODO TODO
+    }
+    
+    public String getIpAddress() throws UnknownHostException {
+        InetAddress addr = InetAddress.getLocalHost();
+        String ipAddress = addr.getHostAddress();
+        return ipAddress;
+    }
+
+    /**
+     *
+     * @param fName
+     * @param lName
+     * @param ticketNum
+     * @param allThePassengers
+     * @param someOut
+     * @return
+     * @throws MalformedURLException
+     * @throws IOException
+     */
+    static boolean checkValidLogIn(String fName, String lName, String ticketNum, ArrayList<Passenger> allThePassengers, PrintWriter someOut) throws MalformedURLException, IOException {
         for (int i = 0; i < allThePassengers.size(); i++) {
-            if(allThePassengers.get(i).firstName.equalsIgnoreCase(fName) && allThePassengers.get(i).lastName.equalsIgnoreCase(lName)){
+            if (allThePassengers.get(i).firstName.equalsIgnoreCase(fName) && allThePassengers.get(i).lastName.equalsIgnoreCase(lName)) {
                 String ticketsUrl = "http://fys.securidoc.nl:11111/Ticket";
                 String ticketsRequestBody = "{\"function\": \"List\", \"teamId\": \"IN102-2\", \"teamKey\": \"c4fe461a10cffe4857aff6f76d3615e7\", \"requestId\": \"123\"}";
                 String ticketsResponse = requestGetResponseString(ticketsRequestBody, ticketsUrl);//Get the response as string
@@ -77,18 +93,17 @@ public class entryServlet extends HttpServlet {
         }
         return false;//If first and list name didn't match
     }
-    
-    static boolean ticketExistance(String ticketnum, ArrayList<Ticket> allTheTickets){
+
+    static boolean ticketExistance(String ticketnum, ArrayList<Ticket> allTheTickets) {
         for (int i = 0; i < allTheTickets.size(); i++) {
-            if (allTheTickets.get(i).ticketNumber.equalsIgnoreCase(ticketnum)){
+            if (allTheTickets.get(i).ticketNumber.equalsIgnoreCase(ticketnum)) {
                 return true;
             }
         }
         return false;
     }
-    
-    
-    static ArrayList<Passenger> getPassengers(String passengerAsString){
+
+    static ArrayList<Passenger> getPassengers(String passengerAsString) {
         Gson gson = new Gson();
         JsonObject passengerResJsonObject = gson.fromJson(passengerAsString, JsonObject.class);
 
@@ -107,31 +122,27 @@ public class entryServlet extends HttpServlet {
         }
         return listPassengers;
     }
-    
-    static ArrayList<Ticket> getTickets(String TicketsAsString){
+
+    static ArrayList<Ticket> getTickets(String TicketsAsString) {
         Gson gson = new Gson();
-        
+
         JsonObject ticketResJsonObject = gson.fromJson(TicketsAsString, JsonObject.class);
-        
+
         JsonObject theTickets = (JsonObject) ticketResJsonObject.get("tickets");
-        
+
         List<JsonElement> values = theTickets.entrySet()
                 .stream()
                 .map(i -> i.getValue())
                 .collect(Collectors.toCollection(ArrayList::new));
-        
+
         ArrayList<Ticket> listTickets = new ArrayList<>();
-        
+
         for (int i = 0; i < values.size(); i++) {
             Ticket willBeAdded = gson.fromJson(values.get(i), Ticket.class);
             listTickets.add(i, willBeAdded);
         }
         return listTickets;
     }
-    
-    
-    
-    
 
     static String requestGetResponseString(String dataNaarServer, String urlString) throws MalformedURLException, IOException {
         String jsonData = dataNaarServer;
