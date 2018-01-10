@@ -52,18 +52,19 @@ public class entryServlet extends HttpServlet {
 
         if (checkValidLogIn(firstName, lastName, ticketNumber, listPassengers, out)) {
             String ipAddress = getIpAddress();
-            grantUserInternet(ipAddress);
+//            grantUserInternet(ipAddress);
             request.getRequestDispatcher("welkom_en.html").forward(request, response);
         } else {
-            out.println("Go to hell");
+            request.getRequestDispatcher("notFound.html").forward(request, response);
+
         }
     }
-    
-    public void grantUserInternet(String ipAddress) throws IOException {
-        Runtime rt = Runtime.getRuntime();
-        Process proc1 = rt.exec("iptables iets" + ipAddress);//////////////////////////////// TODO TODO TODO TODO TODO
-    }
-    
+
+//    public void grantUserInternet(String ipAddress) throws IOException {
+//        Runtime rt = Runtime.getRuntime();
+//        Process proc1 = rt.exec("iptables iets" + ipAddress);//////////////////////////////// TODO TODO TODO TODO TODO
+//    }
+
     public String getIpAddress() throws UnknownHostException {
         InetAddress addr = InetAddress.getLocalHost();
         String ipAddress = addr.getHostAddress();
