@@ -4,9 +4,17 @@
         <servlet-name>entryServlet</servlet-name>
         <servlet-class>entryServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RedirectionServlet</servlet-name>
+        <servlet-class>RedirectionServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>entryServlet</servlet-name>
         <url-pattern>/entryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RedirectionServlet</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
