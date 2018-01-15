@@ -27,6 +27,32 @@ import javax.servlet.http.HttpServletResponse;
 public class entryServlet extends HttpServlet {
 
     /**
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String requestedUrl = request.getServerName() + ":"
+                + request.getServerPort()
+                + request.getRequestURI();
+        final String BASE_URL = "192.168.42.1:8080";
+
+        if (!requestedUrl.equalsIgnoreCase(BASE_URL)
+                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/index.html")
+                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/notFound.html")
+                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/privacy.html")
+                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/welkom_en.html")
+                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/welkom_nl.html")) {
+            response.setStatus(302);
+            response.setHeader("location", BASE_URL + "/index.html");
+        }
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
@@ -51,7 +77,10 @@ public class entryServlet extends HttpServlet {
         ArrayList<Passenger> listPassengers = getPassengers(passagiersResponse);//Passengers ArrayList
 
         if (checkValidLogIn(firstName, lastName, ticketNumber, listPassengers, out)) {
-            String ipAddress = getIpAddress();
+//            String ipAddress = getIpAddress();
+            String ipAddress = request.getRemoteAddr();
+            out.print(ipAddress);
+            grantUserInternet(ipAddress);
 //            grantUserInternet(ipAddress);
             request.getRequestDispatcher("welkom_en.html").forward(request, response);
         } else {
@@ -60,10 +89,10 @@ public class entryServlet extends HttpServlet {
         }
     }
 
-//    public void grantUserInternet(String ipAddress) throws IOException {
-//        Runtime rt = Runtime.getRuntime();
-//        Process proc1 = rt.exec("iptables iets" + ipAddress);//////////////////////////////// TODO TODO TODO TODO TODO
-//    }
+    public void grantUserInternet(String ipAddress) throws IOException {
+        Runtime rt = Runtime.getRuntime();
+        Process proc1 = rt.exec("iptables -I " + ipAddress);//////////////////////////////// TODO TODO TODO TODO TODO
+    }
 
     public String getIpAddress() throws UnknownHostException {
         InetAddress addr = InetAddress.getLocalHost();
