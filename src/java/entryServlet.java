@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import com.google.gson.*;
 import java.io.*;
@@ -21,36 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Dit is de login servlet die verantwoordelijk is voor het authoriseren van
+ * passagiers en dan het internettoegang geven of weer redirecten naar de log in pagina
  * @author jidar
  */
 public class entryServlet extends HttpServlet {
-
-    /**
-     *
-     * @param req
-     * @param resp
-     * @throws ServletException
-     * @throws IOException
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String requestedUrl = request.getServerName() + ":"
-                + request.getServerPort()
-                + request.getRequestURI();
-        final String BASE_URL = "192.168.42.1:8080";
-
-        if (!requestedUrl.equalsIgnoreCase(BASE_URL)
-                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/index.html")
-                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/notFound.html")
-                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/privacy.html")
-                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/welkom_en.html")
-                && !requestedUrl.equalsIgnoreCase(BASE_URL + "/welkom_nl.html")) {
-            response.setStatus(302);
-            response.setHeader("location", BASE_URL + "/index.html");
-        }
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -70,34 +40,33 @@ public class entryServlet extends HttpServlet {
 
         String passagiersResponse = requestGetResponseString(passengerReqestBody, passagiersUrlString);
 
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String ticketNumber = request.getParameter("ticketNumber");
+        final String firstName = request.getParameter("firstName");
+        final String lastName = request.getParameter("lastName");
+        final String ticketNumber = request.getParameter("ticketNumber");
 
         ArrayList<Passenger> listPassengers = getPassengers(passagiersResponse);//Passengers ArrayList
 
         if (checkValidLogIn(firstName, lastName, ticketNumber, listPassengers, out)) {
-//            String ipAddress = getIpAddress();
             String ipAddress = request.getRemoteAddr();
-            out.print(ipAddress);
-            grantUserInternet(ipAddress);
-//            grantUserInternet(ipAddress);
-            request.getRequestDispatcher("welkom_en.html").forward(request, response);
+            try {
+                grantUserInternet(ipAddress);
+            } catch (Exception e) {
+                System.out.println(e.getStackTrace());
+            } finally {
+                request.getRequestDispatcher("welkom_en.html").forward(request, response);
+            }
+
         } else {
             request.getRequestDispatcher("notFound.html").forward(request, response);
 
         }
     }
 
-    public void grantUserInternet(String ipAddress) throws IOException {
-        Runtime rt = Runtime.getRuntime();
-        Process proc1 = rt.exec("iptables -I " + ipAddress);//////////////////////////////// TODO TODO TODO TODO TODO
-    }
-
-    public String getIpAddress() throws UnknownHostException {
-        InetAddress addr = InetAddress.getLocalHost();
-        String ipAddress = addr.getHostAddress();
-        return ipAddress;
+    public void grantUserInternet(String ipAddress) throws IOException, InterruptedException {
+        String[] prerouting = {"/bin/bash", "-c", "echo \"raspberry\"| sudo -S iptables -t nat -I PREROUTING -s " + ipAddress + " -p tcp -j ACCEPT"};
+        String[] forward = {"/bin/bash", "-c", "echo \"raspberry\"| sudo -S iptables -I FORWARD -s " + ipAddress + " -j ACCEPT"};
+        Runtime.getRuntime().exec(prerouting);
+        Runtime.getRuntime().exec(forward);
     }
 
     /**
@@ -132,6 +101,8 @@ public class entryServlet extends HttpServlet {
         }
         return false;
     }
+    
+    
 
     static ArrayList<Passenger> getPassengers(String passengerAsString) {
         Gson gson = new Gson();
@@ -139,16 +110,17 @@ public class entryServlet extends HttpServlet {
 
         JsonObject thePassengers = (JsonObject) passengerResJsonObject.get("passengers");
 
-        List<JsonElement> values = thePassengers.entrySet()
+        ArrayList<JsonElement> values = thePassengers.entrySet()
                 .stream()
-                .map(i -> i.getValue())
+                .map(item -> item.getValue())
                 .collect(Collectors.toCollection(ArrayList::new));
 
+        
         ArrayList<Passenger> listPassengers = new ArrayList<>();
 
         for (int i = 0; i < values.size(); i++) {
             Passenger willBeAdded = gson.fromJson(values.get(i), Passenger.class);
-            listPassengers.add(i, willBeAdded);
+            listPassengers.add(willBeAdded);
         }
         return listPassengers;
     }

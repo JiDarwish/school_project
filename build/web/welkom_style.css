@@ -11,7 +11,6 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  font-family: serif;
 }
 
 /*The header*/
@@ -21,7 +20,6 @@ header img {
 }
 
 header {
-  background-color: white;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -48,7 +46,6 @@ ul {
 }
 
 #langs li {
-  display: inline-block;
   width: 8%;
   float: right;
   margin-left: 1rem;
@@ -63,44 +60,10 @@ ul {
   transform: scale(1.2);
 }
 
-/*The nav bar*/
-
-nav {
-  background-color: #d81e05;
-}
-
-#navWrapper {
-  width: 60%;
-  margin: 0 auto;
-}
-
-#navWrapper a {
-  padding: 0.5rem;
-  color: white;
-  font-weight: bold;
-  width: 24%;
-  display: inline-block;
-  text-align: center;
-  border-left: ridge black 0.05rem;
-  -webkit-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-
-#navWrapper a:first-child {
-  border: none;
-}
-
-#navWrapper a:hover {
-  color: #d81e05;
-  background-color: #fff;
-}
-
-/* End navBar*/
-
 /*The main*/
 
 #loggedInInfo {
+  text-align: center;
   background-color: white;
   width: 60%;
   margin: 5rem auto;
